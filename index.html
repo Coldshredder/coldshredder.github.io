@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BoostGames — Оптимизированные сборки</title>
+  <title>BoostGames — Каталог сборок</title>
   <style>
     :root {
       --bg-color: #0b0e14;
@@ -105,13 +105,11 @@
       background-color: var(--accent-color);
       color: #fff;
       border: none;
-      padding: 10px 16px;
+      padding: 8px 14px;
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
-      text-decoration: none;
-      display: inline-block;
       text-align: center;
     }
 
@@ -129,72 +127,114 @@
       overflow-x: hidden;
     }
 
-    /* Лента жанров */
-    .genres-container {
+    /* Верхняя панель (поиск как на скриншоте) */
+    .top-bar {
       display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 8px;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
     }
 
-    .genres-container::-webkit-scrollbar {
-      height: 6px;
+    .top-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .genres-container::-webkit-scrollbar-thumb {
-      background: var(--border-color);
-      border-radius: 3px;
-    }
-
-    .genre-btn {
+    .search-box {
       background: var(--card-bg);
-      color: var(--text-muted);
       border: 1px solid var(--border-color);
-      padding: 8px 18px;
-      border-radius: 20px;
-      white-space: nowrap;
-      cursor: pointer;
-      font-weight: 500;
+      border-radius: 8px;
+      padding: 8px 14px;
+      color: white;
+      width: 300px;
+      outline: none;
     }
 
-    .genre-btn.active, .genre-btn:hover {
-      background: var(--accent-color);
-      color: #fff;
+    .search-box:focus {
       border-color: var(--accent-color);
     }
 
-    /* Сетка карт */
+    /* Сетка карточек игр в стиле лаунчера */
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
     }
 
     .game-card {
       background: var(--card-bg);
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1px solid var(--border-color);
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: transform 0.2s;
+    }
+
+    .game-card:hover {
+      border-color: #3f4248;
+      transform: translateY(-2px);
     }
 
     .game-card img {
       width: 100%;
-      height: 180px;
+      height: 160px;
       object-fit: cover;
     }
 
-    .game-info {
-      padding: 16px;
+    .game-body {
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       flex: 1;
     }
 
+    .game-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Теги репаков (как на скрине Dodi, Fitgirl и т.д.) */
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .tag {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .game-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 10px;
+    }
+
+    /* Вкладки */
+    .tab-section {
+      display: none;
+    }
+
+    .tab-section.active {
+      display: block;
+    }
+
+    /* Отзывы */
     .reviews-list {
-      max-height: 120px;
+      max-height: 100px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -213,15 +253,6 @@
     .review-author {
       font-weight: 700;
       color: var(--accent-color);
-    }
-
-    /* Вкладки */
-    .tab-section {
-      display: none;
-    }
-
-    .tab-section.active {
-      display: block;
     }
 
     /* Модалка */
@@ -269,63 +300,23 @@
     <button class="btn" onclick="openProfileModal()">Редактировать профиль</button>
 
     <div class="nav-menu">
-      <button class="nav-btn active" id="btn-tab-catalog" onclick="switchTab('catalog')">🎮 Каталог</button>
+      <button class="nav-btn active" id="btn-tab-catalog" onclick="switchTab('catalog')">🔥 Главная (Популярное)</button>
       <button class="nav-btn" id="btn-tab-library" onclick="switchTab('library')">📚 Моя библиотека</button>
     </div>
   </aside>
 
-  <!-- Главный контент -->
+  <!-- Контент -->
   <main class="main-content">
     
     <!-- Вкладка: Каталог -->
     <div id="tab-catalog" class="tab-section active">
-      <div class="genres-container" style="margin-bottom: 20px;">
-        <button class="genre-btn active" onclick="filterGenre('all', this)">Все игры</button>
-        <button class="genre-btn" onclick="filterGenre('shooter', this)">Шутеры</button>
-        <button class="genre-btn" onclick="filterGenre('rpg', this)">RPG</button>
-        <button class="genre-btn" onclick="filterGenre('sim', this)">Симуляторы</button>
-        <button class="genre-btn" onclick="filterGenre('openworld', this)">Открытый мир</button>
+      <div class="top-bar">
+        <div class="top-title">🔥 Сейчас популярно</div>
+        <input type="text" class="search-box" id="searchBox" placeholder="Поиск игры по названию..." oninput="filterGames()">
       </div>
 
-      <div class="games-grid">
-        
-        <!-- S.T.A.L.K.E.R. -->
-        <div class="game-card" data-genre="shooter openworld">
-          <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" alt="STALKER">
-          <div class="game-info">
-            <h3>S.T.A.L.K.E.R. Anomaly</h3>
-            <p style="font-size:0.85rem; color: var(--text-muted)">Оптимизированная сборка с настроенным фреймгеном.</p>
-            <!-- Ссылка на файл задается в href -->
-            <button class="btn" onclick="startDownload('stalker', 'https://example.com/file-stalker.zip')">Скачать сборку</button>
-            <div style="font-size:0.85rem; font-weight:bold; margin-top:6px;">Отзывы игроков:</div>
-            <div class="reviews-list" id="reviews-stalker">Загрузка отзывов...</div>
-          </div>
-        </div>
-
-        <!-- RDR 2 -->
-        <div class="game-card" data-genre="openworld rpg">
-          <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500" alt="RDR2">
-          <div class="game-info">
-            <h3>Red Dead Redemption 2</h3>
-            <p style="font-size:0.85rem; color: var(--text-muted)">Пресет ультра-низких настроек для слабых ПК.</p>
-            <button class="btn" onclick="startDownload('rdr2', '')">Скачать сборку</button>
-            <div style="font-size:0.85rem; font-weight:bold; margin-top:6px;">Отзывы игроков:</div>
-            <div class="reviews-list" id="reviews-rdr2">Загрузка отзывов...</div>
-          </div>
-        </div>
-
-        <!-- ETS 2 -->
-        <div class="game-card" data-genre="sim">
-          <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500" alt="ETS2">
-          <div class="game-info">
-            <h3>Euro Truck Simulator 2</h3>
-            <p style="font-size:0.85rem; color: var(--text-muted)">Конфиг руля 180° и сглаживание.</p>
-            <button class="btn" onclick="startDownload('ets2', '')">Скачать сборку</button>
-            <div style="font-size:0.85rem; font-weight:bold; margin-top:6px;">Отзывы игроков:</div>
-            <div class="reviews-list" id="reviews-ets2">Загрузка отзывов...</div>
-          </div>
-        </div>
-
+      <div class="games-grid" id="gamesGrid">
+        <!-- Карточки заполняются скриптом динамически для удобства -->
       </div>
     </div>
 
@@ -333,7 +324,7 @@
     <div id="tab-library" class="tab-section">
       <h2 style="margin-bottom:16px;">Моя библиотека скачанных игр</h2>
       <div id="libraryContainer" class="games-grid">
-        <!-- Сюда добавляются игры при скачивании -->
+        <!-- Сюда попадают скачанные игры -->
       </div>
     </div>
 
@@ -352,7 +343,7 @@
     </div>
   </div>
 
-  <!-- Firebase Integration -->
+  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
@@ -370,32 +361,31 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    const gameIds = ['stalker', 'rdr2', 'ets2'];
+    // Загрузка отзывов для каждой игры
+    window.initFirebaseReviews = function(gameIds) {
+      gameIds.forEach(gameId => {
+        const reviewsRef = ref(db, 'reviews/' + gameId);
+        onValue(reviewsRef, (snapshot) => {
+          const data = snapshot.val();
+          const container = document.getElementById('reviews-' + gameId);
+          if (container) container.innerHTML = '';
 
-    // Загрузка отзывов реального времени
-    gameIds.forEach(gameId => {
-      const reviewsRef = ref(db, 'reviews/' + gameId);
-      onValue(reviewsRef, (snapshot) => {
-        const data = snapshot.val();
-        const container = document.getElementById('reviews-' + gameId);
-        if (container) container.innerHTML = '';
+          if (!data) {
+            if (container) container.innerHTML = '<div style="color:var(--text-muted); font-size:0.8rem;">Пока нет отзывов</div>';
+            return;
+          }
 
-        if (!data) {
-          if (container) container.innerHTML = '<div style="color:var(--text-muted);">Пока нет отзывов</div>';
-          return;
-        }
-
-        Object.keys(data).forEach(key => {
-          const item = data[key];
-          const div = document.createElement('div');
-          div.className = 'review-item';
-          div.innerHTML = `<span class="review-author">${escapeHtml(item.user)}:</span> ${escapeHtml(item.text)}`;
-          if (container) container.appendChild(div);
+          Object.keys(data).forEach(key => {
+            const item = data[key];
+            const div = document.createElement('div');
+            div.className = 'review-item';
+            div.innerHTML = `<span class="review-author">${escapeHtml(item.user)}:</span> ${escapeHtml(item.text)}`;
+            if (container) container.appendChild(div);
+          });
         });
       });
-    });
+    };
 
-    // Функция отправки отзыва из БИБЛИОТЕКИ
     window.sendReviewFromLibrary = function(gameId) {
       const input = document.getElementById('lib-input-' + gameId);
       const text = input.value.trim();
@@ -411,7 +401,7 @@
       });
 
       input.value = '';
-      alert('Отзыв отправлен!');
+      alert('Отзыв отправлен в облако!');
     };
 
     function escapeHtml(str) {
@@ -419,18 +409,65 @@
     }
   </script>
 
-  <!-- Логика UI -->
+  <!-- Логика лаунчера и каталога -->
   <script>
-    const gamesData = {
-      'stalker': { title: 'S.T.A.L.K.E.R. Anomaly', img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500' },
-      'rdr2': { title: 'Red Dead Redemption 2', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500' },
-      'ets2': { title: 'Euro Truck Simulator 2', img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500' }
-    };
+    const games = [
+      { id: 'ets2', title: 'Euro Truck Simulator 2', tags: ['DODI', 'Rutracker', 'OnlineFix'], img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500', fileUrl: 'https://example.com/ets2.zip' },
+      { id: 'rdr2', title: 'Red Dead Redemption 2', tags: ['DODI', 'Fitgirl', 'RexaGames'], img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500', fileUrl: 'https://example.com/rdr2.zip' },
+      { id: 'stalker_anomaly', title: 'S.T.A.L.K.E.R. Anomaly', tags: ['Custom Pack', 'Lossless Scaling'], img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500', fileUrl: 'https://example.com/anomaly.zip' },
+      { id: 'stalker_gamma', title: 'S.T.A.L.K.E.R. GAMMA', tags: ['Modpack', 'Hardcore'], img: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500', fileUrl: '' },
+      { id: 'stalker2', title: 'S.T.A.L.K.E.R. 2: Heart of Chornobyl', tags: ['DODI', 'Official'], img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500', fileUrl: '' },
+      { id: 'blood_dawn', title: 'The Blood of Dawn Walker', tags: ['RPG', 'New'], img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500', fileUrl: '' },
+      { id: 'spiderman', title: "Marvel's Spider-Man Remastered", tags: ['DODI', 'Rutracker'], img: 'https://images.unsplash.com/photo-1635863138275-d9b33299680b?w=500', fileUrl: '' },
+      { id: 'tlou', title: 'The Last of Us Part I', tags: ['Fitgirl', 'DODI'], img: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=500', fileUrl: '' },
+      { id: 'witcher3', title: 'The Witcher 3: Wild Hunt (Next-Gen)', tags: ['Wolf School', 'Bear School'], img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500', fileUrl: '' },
+      { id: 'metro', title: 'Metro Exodus Enhanced Edition', tags: ['DODI', 'RexaGames'], img: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=500', fileUrl: '' },
+      { id: 'skyrim', title: 'The Elder Scrolls V: Skyrim Special Edition', tags: ['Mod Organizer 2', 'Thieves Guild'], img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500', fileUrl: '' }
+    ];
 
-    // Скачивание
+    function renderCatalog(filterText = '') {
+      const grid = document.getElementById('gamesGrid');
+      grid.innerHTML = '';
+
+      const filtered = games.filter(g => g.title.toLowerCase().includes(filterText.toLowerCase()));
+
+      filtered.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.innerHTML = `
+          <img src="${game.img}" alt="${game.title}">
+          <div class="game-body">
+            <div class="game-title">${game.title}</div>
+            <div class="tags-row">
+              ${game.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+            </div>
+            
+            <div style="font-size:0.8rem; font-weight:bold; margin-top:4px;">Отзывы:</div>
+            <div class="reviews-list" id="reviews-${game.id}">Загрузка...</div>
+
+            <div class="game-actions">
+              <button class="btn" style="width:100%;" onclick="startDownload('${game.id}', '${game.fileUrl}')">Скачать сборку</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Инициализируем подгрузку отзывов из Firebase для отображаемых игр
+      if (window.initFirebaseReviews) {
+        window.initFirebaseReviews(games.map(g => g.id));
+      }
+    }
+
+    function filterGames() {
+      const query = document.getElementById('searchBox').value;
+      renderCatalog(query);
+    }
+
+    // Скачивание и добавление в библиотеку
     function startDownload(gameId, fileUrl) {
       if (!fileUrl) {
-        alert('Файл для этой сборки еще не добавлен!');
+        alert('Файл для этой сборки еще не загружен на сервер!');
         return;
       }
 
@@ -441,7 +478,7 @@
         library.push(gameId);
         localStorage.setItem('user_library', JSON.stringify(library));
       }
-      alert('Сборка добавлена в вашу библиотеку!');
+      alert('Сборка успешно добавлена в вашу библиотеку!');
     }
 
     // Отрисовка Библиотеки
@@ -456,21 +493,21 @@
       }
 
       library.forEach(gameId => {
-        const game = gamesData[gameId];
+        const game = games.find(g => g.id === gameId);
         if (!game) return;
 
         const card = document.createElement('div');
         card.className = 'game-card';
         card.innerHTML = `
           <img src="${game.img}" alt="${game.title}">
-          <div class="game-info">
-            <h3>${game.title}</h3>
-            <p style="font-size:0.8rem; color:#23a55a;">✓ Есть в библиотеке</p>
+          <div class="game-body">
+            <div class="game-title">${game.title}</div>
+            <p style="font-size:0.8rem; color:#23a55a;">✓ Установлено в библиотеке</p>
             
-            <div style="margin-top:10px;">
-              <h4 style="font-size:0.9rem; margin-bottom:6px;">Написать отзыв:</h4>
-              <input type="text" id="lib-input-${gameId}" placeholder="Поделитесь впечатлением..." style="width:100%; padding:8px; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:white; border-radius:6px; margin-bottom:6px;">
-              <button class="btn" style="width:100%;" onclick="sendReviewFromLibrary('${gameId}')">Оставить отзыв</button>
+            <div style="margin-top:6px;">
+              <h4 style="font-size:0.85rem; margin-bottom:4px;">Написать отзыв:</h4>
+              <input type="text" id="lib-input-${gameId}" placeholder="Ваш отзыв..." style="width:100%; padding:6px; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:white; border-radius:6px; margin-bottom:4px; font-size:0.85rem;">
+              <button class="btn" style="width:100%; padding:6px;" onclick="sendReviewFromLibrary('${gameId}')">Опубликовать</button>
             </div>
           </div>
         `;
@@ -491,53 +528,9 @@
       if (tabName === 'library') renderLibrary();
     }
 
-    // Фильтр
-    function filterGenre(genre, btn) {
-      document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const cards = document.querySelectorAll('#tab-catalog .game-card');
-      cards.forEach(card => {
-        if (genre === 'all' || card.dataset.genre.includes(genre)) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
-
     // Профиль
     function loadProfile() {
       document.getElementById('userName').textContent = localStorage.getItem('profile_name') || 'Игрок';
       document.getElementById('userAvatar').src = localStorage.getItem('profile_avatar') || 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150';
       document.getElementById('userStatus').textContent = localStorage.getItem('profile_status') || 'В поиске сборок...';
-      document.getElementById('userFav').textContent = 'Любимая: ' + (localStorage.getItem('profile_fav') || 'S.T.A.L.K.E.R.');
-    }
-
-    function openProfileModal() {
-      document.getElementById('editName').value = localStorage.getItem('profile_name') || '';
-      document.getElementById('editAvatar').value = localStorage.getItem('profile_avatar') || '';
-      document.getElementById('editStatus').value = localStorage.getItem('profile_status') || '';
-      document.getElementById('editFav').value = localStorage.getItem('profile_fav') || '';
-      document.getElementById('profileModal').style.display = 'flex';
-    }
-
-    function closeProfileModal() {
-      document.getElementById('profileModal').style.display = 'none';
-    }
-
-    function saveProfile() {
-      localStorage.setItem('profile_name', document.getElementById('editName').value);
-      localStorage.setItem('profile_avatar', document.getElementById('editAvatar').value);
-      localStorage.setItem('profile_status', document.getElementById('editStatus').value);
-      localStorage.setItem('profile_fav', document.getElementById('editFav').value);
-      loadProfile();
-      closeProfileModal();
-    }
-
-    window.onload = function() {
-      loadProfile();
-    };
-  </script>
-</body>
-</html>
+      document.getElementById('userFav').textContent = 'Любимая: ' + (localStorage.getItem('profile_fav
