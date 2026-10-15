@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoostGames — Оптимизированные сборки</title>
+    <title>BoostGames — Каталог сборок</title>
     <style>
         :root {
             --bg-color: #0f111a;
@@ -34,7 +34,7 @@
 
         header {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 20px;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -57,70 +57,86 @@
             flex: 1;
         }
 
-        /* Стили для разделов (секций) */
-        .section-box {
+        /* Карточка игры */
+        .game-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 25px;
+            padding: 20px;
             margin-bottom: 25px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .section-box h2 {
+        /* Изображение игры */
+        .game-img {
+            width: 260px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: #10121b;
+            flex-shrink: 0;
+        }
+
+        /* Контент внутри карточки */
+        .game-info {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .game-title {
             color: var(--accent-color);
             font-size: 1.5rem;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
+            margin-bottom: 10px;
         }
 
-        .section-box p {
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
-
-        /* Стили для таблички */
-        .game-table {
+        /* Таблица характеристик внутри карточки */
+        .specs-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 0.95rem;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
         }
 
-        .game-table th, .game-table td {
-            padding: 12px 15px;
-            text-align: left;
+        .specs-table td {
+            padding: 6px 10px;
             border-bottom: 1px solid var(--border-color);
         }
 
-        .game-table th {
-            color: var(--accent-color);
-            background-color: rgba(0, 255, 136, 0.05);
+        .specs-table tr:last-child td {
+            border-bottom: none;
         }
 
-        .game-table td {
-            color: var(--text-color);
+        .specs-table td:first-child {
+            color: var(--text-secondary);
+            width: 40%;
+            font-weight: 500;
         }
 
-        .game-table tr:hover {
-            background-color: rgba(255, 255, 136, 0.02);
-        }
-
-        /* Кнопка */
+        /* Кнопка скачивания */
         .btn {
             display: inline-block;
-            padding: 8px 15px;
+            padding: 10px 20px;
             background-color: var(--accent-color);
             color: #000;
             font-weight: bold;
             text-decoration: none;
             border-radius: 6px;
             transition: opacity 0.2s ease;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .btn:hover {
             opacity: 0.85;
+        }
+
+        .btn.disabled {
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            pointer-events: none;
         }
 
         footer {
@@ -131,52 +147,76 @@
             font-size: 0.9rem;
             border-top: 1px solid var(--border-color);
         }
+
+        /* Адаптивность для телефонов */
+        @media (max-width: 600px) {
+            .game-img {
+                width: 100%;
+                height: 180px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>BoostGames</h1>
-        <p>Готовые оптимизированные сборки игр: скачал, распаковал и играешь без лагов.</p>
+        <p>Готовые оптимизированные сборки для слабого железа :)</p>
     </header>
 
     <div class="container">
-        
-        <!-- Секция 1: О проекте -->
-        <div class="section-box">
-            <h2>О проекте :)</h2>
-            <p>Здесь собираются игры с уже встроенными модами на оптимизацию, настроенными конфигами и исправленными багами. Больше не нужно часами искать фиксы по форумам — всё сделано за вас.</p>
+
+        <!-- КАРТОЧКА 1: S.T.A.L.K.E.R. Anomaly -->
+        <div class="game-card">
+            <!-- Ссылка на картинку (можно заменить на любую свою ссылку на фото) -->
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&q=80" alt="S.T.A.L.K.E.R. Anomaly" class="game-img">
+            
+            <div class="game-info">
+                <div class="game-title">S.T.A.L.K.E.R. Anomaly 1.5.2</div>
+                
+                <table class="specs-table">
+                    <tr>
+                        <td>Версия сборки:</td>
+                        <td>v1.0 (Lite)</td>
+                    </tr>
+                    <tr>
+                        <td>Оптимизация:</td>
+                        <td>Пак текстур низкого разрешения + user.ltx под FPS</td>
+                    </tr>
+                    <tr>
+                        <td>Вшитые моды:</td>
+                        <td>FPS Boost, отключение тяжелых теней</td>
+                    </tr>
+                    <tr>
+                        <td>Размер:</td>
+                        <td>~9.5 ГБ</td>
+                    </tr>
+                </table>
+
+                <a href="#" class="btn">Скачать сборку</a>
+            </div>
         </div>
 
-        <!-- Секция 2: Таблица с играми -->
-        <div class="section-box">
-            <h2>Каталог сборок</h2>
-            <p>Список доступных проектов и их текущий статус:</p>
+        <!-- КАРТОЧКА 2: Следующая игра -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&q=80" alt="Следующий проект" class="game-img">
             
-            <table class="game-table">
-                <thead>
+            <div class="game-info">
+                <div class="game-title">Скоро новая игра</div>
+                
+                <table class="specs-table">
                     <tr>
-                        <th>Игра / Сборка</th>
-                        <th>Особенности</th>
-                        <th>Статус</th>
-                        <th>Действие</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>S.T.A.L.K.E.R. Anomaly</strong></td>
-                        <td>Вшиты моды на FPS, оптимизация теней, user.ltx</td>
-                        <td><span style="color: var(--accent-color);">Готово</span></td>
-                        <td><a href="#" class="btn">Скоро</a></td>
+                        <td>Статус:</td>
+                        <td>Тестирование FPS и конфигов</td>
                     </tr>
                     <tr>
-                        <td><strong>Следующая игра</strong></td>
-                        <td>Подборка модов под слабое железо</td>
-                        <td><span style="color: var(--text-secondary);">В разработке</span></td>
-                        <td><a href="#" class="btn" style="opacity: 0.5; pointer-events: none;">Ждем</a></td>
+                        <td>Оптимизация:</td>
+                        <td>В процессе настройки</td>
                     </tr>
-                </tbody>
-            </table>
+                </table>
+
+                <a href="#" class="btn disabled">В разработке</a>
+            </div>
         </div>
 
     </div>
