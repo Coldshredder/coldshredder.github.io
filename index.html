@@ -361,17 +361,17 @@
     const db = getDatabase(app);
 
     const games = [
-      { id: 'ets2', title: 'Euro Truck Simulator 2', tags: ['DODI', 'Rutracker', 'OnlineFix'], img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500', fileUrl: 'https://example.com/ets2.zip' },
-      { id: 'rdr2', title: 'Red Dead Redemption 2', tags: ['DODI', 'Fitgirl', 'RexaGames'], img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500', fileUrl: 'https://example.com/rdr2.zip' },
-      { id: 'stalker_anomaly', title: 'S.T.A.L.K.E.R. Anomaly', tags: ['Custom Pack', 'Lossless Scaling'], img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500', fileUrl: 'https://example.com/anomaly.zip' },
-      { id: 'stalker_gamma', title: 'S.T.A.L.K.E.R. GAMMA', tags: ['Modpack', 'Hardcore'], img: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500', fileUrl: '' },
-      { id: 'stalker2', title: 'S.T.A.L.K.E.R. 2: Heart of Chornobyl', tags: ['DODI', 'Official'], img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500', fileUrl: '' },
-      { id: 'blood_dawn', title: 'The Blood of Dawnwalker', tags: ['RPG', 'New'], img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500', fileUrl: '' },
-      { id: 'spiderman', title: "Marvel's Spider-Man Remastered", tags: ['DODI', 'Rutracker'], img: 'https://images.unsplash.com/photo-1635863138275-d9b33299680b?w=500', fileUrl: '' },
-      { id: 'tlou', title: 'The Last of Us Part I', tags: ['Fitgirl', 'DODI'], img: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=500', fileUrl: '' },
-      { id: 'witcher3', title: 'The Witcher 3: Wild Hunt', tags: ['Wolf School', 'Bear School'], img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500', fileUrl: '' },
-      { id: 'metro', title: 'Metro Exodus Enhanced Edition', tags: ['DODI', 'RexaGames'], img: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=500', fileUrl: '' },
-      { id: 'skyrim', title: 'The Elder Scrolls V: Skyrim', tags: ['Mod Organizer 2', 'Thieves Guild'], img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500', fileUrl: '' }
+      { id: 'ets2', title: 'Euro Truck Simulator 2', tags: ['DODI', 'Rutracker', 'OnlineFix'], img: ' https://i.playground.ru/e/1m5fWmshbvN12eWkcU3Jog.jpeg},
+      { id: 'rdr2', title: 'Red Dead Redemption 2', tags: ['DODI', 'Fitgirl', 'RexaGames'], img: 'https://avatars.mds.yandex.net/i?id=332c68d038193af60e61fcc4ab064f52_l-12373254-images-thumbs&n=13 },
+      { id: 'stalker_anomaly', title: 'S.T.A.L.K.E.R. Anomaly', tags: ['Custom Pack', 'Lossless Scaling'], img: 'https://static.wikia.nocookie.net/stalker/images/c/c5/Anomaly03.jpg/revision/latest/scale-to-width-down/536?cb=20251025161017&path-prefix=ru' },
+      { id: 'stalker_gamma', title: 'S.T.A.L.K.E.R. GAMMA', tags: ['Modpack', 'Hardcore'], img: 'https://torrents.ws/_ld/70/7041.webp'' },
+      { id: 'stalker2', title: 'S.T.A.L.K.E.R. 2: Heart of Chornobyl', tags: ['DODI', 'Official'], img: 'https://avatars.mds.yandex.net/get-mpic/12260097/2a000001934ea0687c32de58847ad3ca473c/orig '' },
+      { id: 'blood_dawn', title: 'The Blood of Dawnwalker', tags: ['RPG', 'New'], img: 'https://avatars.mds.yandex.net/get-mpic/18718263/2a0000019fbb99904a3671258e6aafd98373/orig '' },
+      { id: 'spiderman', title: "Marvel's Spider-Man Remastered", tags: ['DODI', 'Rutracker'], img: ' https://www.1c-interes.ru/images/2022/11/spider_man_remastered_pc_main.jpg'' },
+      { id: 'tlou', title: 'The Last of Us Part I', tags: ['Fitgirl', 'DODI'], img: 'https://www.gamespot.com/a/uploads/scale_medium/1197/11970954/2435519-image.jpeg '' },
+      { id: 'witcher3', title: 'The Witcher 3: Wild Hunt', tags: ['Wolf School', 'Bear School'], img: 'https://avatars.mds.yandex.net/i?id=37b2a9f6a6090f0abd3d94f7dcc7d457_l-11860401-images-thumbs&n=13 '' },
+      { id: 'metro', title: 'Metro Exodus Enhanced Edition', tags: ['DODI', 'RexaGames'], img: 'https://store-images.s-microsoft.com/image/apps.17469.65642028844779555.c518e652-fc85-4d6e-99a2-3e9ae1656a91.6cace333-df13-4178-a46d-5938de4654a2 '' },
+      { id: 'skyrim', title: 'The Elder Scrolls V: Skyrim', tags: ['Mod Organizer 2', 'Thieves Guild'], img: ' https://images.gog-statics.com/ddedeef7636157b558d2fac8fa8a6c0d28e6fab0668c6aab7fd28220f29ec734.jpg'' }
     ];
 
     // Подгрузка отзывов из Firebase
