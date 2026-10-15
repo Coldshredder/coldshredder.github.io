@@ -127,7 +127,7 @@
       overflow-x: hidden;
     }
 
-    /* Верхняя панель (поиск как на скриншоте) */
+    /* Верхняя панель */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -157,7 +157,7 @@
       border-color: var(--accent-color);
     }
 
-    /* Сетка карточек игр в стиле лаунчера */
+    /* Сетка карточек игр */
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -199,12 +199,11 @@
       color: #fff;
     }
 
-    /* Теги репаков (как на скрине Dodi, Fitgirl и т.д.) */
     .tags-row {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .tag {
@@ -297,11 +296,11 @@
       <div id="userStatus" class="profile-status">В поиске сборок...</div>
       <div id="userFav" class="profile-fav">Любимая: S.T.A.L.K.E.R.</div>
     </div>
-    <button class="btn" onclick="openProfileModal()">Редактировать профиль</button>
+    <button class="btn" id="btnOpenProfile">Редактировать профиль</button>
 
     <div class="nav-menu">
-      <button class="nav-btn active" id="btn-tab-catalog" onclick="switchTab('catalog')">🔥 Главная (Популярное)</button>
-      <button class="nav-btn" id="btn-tab-library" onclick="switchTab('library')">📚 Моя библиотека</button>
+      <button class="nav-btn active" id="btn-tab-catalog">🔥 Главная (Популярное)</button>
+      <button class="nav-btn" id="btn-tab-library">📚 Моя библиотека</button>
     </div>
   </aside>
 
@@ -312,11 +311,11 @@
     <div id="tab-catalog" class="tab-section active">
       <div class="top-bar">
         <div class="top-title">🔥 Сейчас популярно</div>
-        <input type="text" class="search-box" id="searchBox" placeholder="Поиск игры по названию..." oninput="filterGames()">
+        <input type="text" class="search-box" id="searchBox" placeholder="Поиск игры по названию...">
       </div>
 
-      <div class="games-grid" id="gamesGrid">
-        <!-- Карточки заполняются скриптом динамически для удобства -->
+      <div class="games-grid" id="gamesGrid" style="margin-top: 20px;">
+        <!-- Карточки наполняются через JS -->
       </div>
     </div>
 
@@ -338,12 +337,12 @@
       <input type="text" id="editAvatar" placeholder="Ссылка на аватар">
       <input type="text" id="editStatus" placeholder="Статус">
       <input type="text" id="editFav" placeholder="Любимая игра">
-      <button class="btn" onclick="saveProfile()">Сохранить</button>
-      <button class="btn" style="background:#3f4248" onclick="closeProfileModal()">Отмена</button>
+      <button class="btn" id="btnSaveProfile">Сохранить</button>
+      <button class="btn" style="background:#3f4248" id="btnCloseProfile">Отмена</button>
     </div>
   </div>
 
-  <!-- Firebase -->
+  <!-- Единственный модуль Script, предотвращающий падения JS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
@@ -361,70 +360,45 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Загрузка отзывов для каждой игры
-    window.initFirebaseReviews = function(gameIds) {
-      gameIds.forEach(gameId => {
-        const reviewsRef = ref(db, 'reviews/' + gameId);
-        onValue(reviewsRef, (snapshot) => {
-          const data = snapshot.val();
-          const container = document.getElementById('reviews-' + gameId);
-          if (container) container.innerHTML = '';
-
-          if (!data) {
-            if (container) container.innerHTML = '<div style="color:var(--text-muted); font-size:0.8rem;">Пока нет отзывов</div>';
-            return;
-          }
-
-          Object.keys(data).forEach(key => {
-            const item = data[key];
-            const div = document.createElement('div');
-            div.className = 'review-item';
-            div.innerHTML = `<span class="review-author">${escapeHtml(item.user)}:</span> ${escapeHtml(item.text)}`;
-            if (container) container.appendChild(div);
-          });
-        });
-      });
-    };
-
-    window.sendReviewFromLibrary = function(gameId) {
-      const input = document.getElementById('lib-input-' + gameId);
-      const text = input.value.trim();
-      const userName = localStorage.getItem('profile_name') || 'Игрок';
-
-      if (!text) return;
-
-      const reviewsRef = ref(db, 'reviews/' + gameId);
-      push(reviewsRef, {
-        user: userName,
-        text: text,
-        timestamp: Date.now()
-      });
-
-      input.value = '';
-      alert('Отзыв отправлен в облако!');
-    };
-
-    function escapeHtml(str) {
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-  </script>
-
-  <!-- Логика лаунчера и каталога -->
-  <script>
     const games = [
       { id: 'ets2', title: 'Euro Truck Simulator 2', tags: ['DODI', 'Rutracker', 'OnlineFix'], img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500', fileUrl: 'https://example.com/ets2.zip' },
       { id: 'rdr2', title: 'Red Dead Redemption 2', tags: ['DODI', 'Fitgirl', 'RexaGames'], img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500', fileUrl: 'https://example.com/rdr2.zip' },
       { id: 'stalker_anomaly', title: 'S.T.A.L.K.E.R. Anomaly', tags: ['Custom Pack', 'Lossless Scaling'], img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500', fileUrl: 'https://example.com/anomaly.zip' },
       { id: 'stalker_gamma', title: 'S.T.A.L.K.E.R. GAMMA', tags: ['Modpack', 'Hardcore'], img: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500', fileUrl: '' },
       { id: 'stalker2', title: 'S.T.A.L.K.E.R. 2: Heart of Chornobyl', tags: ['DODI', 'Official'], img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500', fileUrl: '' },
-      { id: 'blood_dawn', title: 'The Blood of Dawn Walker', tags: ['RPG', 'New'], img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500', fileUrl: '' },
+      { id: 'blood_dawn', title: 'The Blood of Dawnwalker', tags: ['RPG', 'New'], img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500', fileUrl: '' },
       { id: 'spiderman', title: "Marvel's Spider-Man Remastered", tags: ['DODI', 'Rutracker'], img: 'https://images.unsplash.com/photo-1635863138275-d9b33299680b?w=500', fileUrl: '' },
       { id: 'tlou', title: 'The Last of Us Part I', tags: ['Fitgirl', 'DODI'], img: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=500', fileUrl: '' },
-      { id: 'witcher3', title: 'The Witcher 3: Wild Hunt (Next-Gen)', tags: ['Wolf School', 'Bear School'], img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500', fileUrl: '' },
+      { id: 'witcher3', title: 'The Witcher 3: Wild Hunt', tags: ['Wolf School', 'Bear School'], img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500', fileUrl: '' },
       { id: 'metro', title: 'Metro Exodus Enhanced Edition', tags: ['DODI', 'RexaGames'], img: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=500', fileUrl: '' },
-      { id: 'skyrim', title: 'The Elder Scrolls V: Skyrim Special Edition', tags: ['Mod Organizer 2', 'Thieves Guild'], img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500', fileUrl: '' }
+      { id: 'skyrim', title: 'The Elder Scrolls V: Skyrim', tags: ['Mod Organizer 2', 'Thieves Guild'], img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500', fileUrl: '' }
     ];
 
+    // Подгрузка отзывов из Firebase
+    function listenReviews(gameId) {
+      const reviewsRef = ref(db, 'reviews/' + gameId);
+      onValue(reviewsRef, (snapshot) => {
+        const data = snapshot.val();
+        const container = document.getElementById('reviews-' + gameId);
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (!data) {
+          container.innerHTML = '<div style="color:var(--text-muted); font-size:0.8rem;">Пока нет отзывов</div>';
+          return;
+        }
+
+        Object.keys(data).forEach(key => {
+          const item = data[key];
+          const div = document.createElement('div');
+          div.className = 'review-item';
+          div.innerHTML = `<span class="review-author">${escapeHtml(item.user)}:</span> ${escapeHtml(item.text)}`;
+          container.appendChild(div);
+        });
+      });
+    }
+
+    // Отрисовка каталога
     function renderCatalog(filterText = '') {
       const grid = document.getElementById('gamesGrid');
       grid.innerHTML = '';
@@ -446,42 +420,41 @@
             <div class="reviews-list" id="reviews-${game.id}">Загрузка...</div>
 
             <div class="game-actions">
-              <button class="btn" style="width:100%;" onclick="startDownload('${game.id}', '${game.fileUrl}')">Скачать сборку</button>
+              <button class="btn btn-download" data-id="${game.id}" style="width:100%;">Скачать сборку</button>
             </div>
           </div>
         `;
         grid.appendChild(card);
+        listenReviews(game.id);
       });
 
-      // Инициализируем подгрузку отзывов из Firebase для отображаемых игр
-      if (window.initFirebaseReviews) {
-        window.initFirebaseReviews(games.map(g => g.id));
-      }
+      document.querySelectorAll('.btn-download').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          startDownload(id);
+        });
+      });
     }
 
-    function filterGames() {
-      const query = document.getElementById('searchBox').value;
-      renderCatalog(query);
-    }
-
-    // Скачивание и добавление в библиотеку
-    function startDownload(gameId, fileUrl) {
-      if (!fileUrl) {
+    // Скачивание
+    function startDownload(gameId) {
+      const game = games.find(g => g.id === gameId);
+      if (!game || !game.fileUrl) {
         alert('Файл для этой сборки еще не загружен на сервер!');
         return;
       }
 
-      window.open(fileUrl, '_blank');
+      window.open(game.fileUrl, '_blank');
 
       let library = JSON.parse(localStorage.getItem('user_library') || '[]');
       if (!library.includes(gameId)) {
         library.push(gameId);
         localStorage.setItem('user_library', JSON.stringify(library));
       }
-      alert('Сборка успешно добавлена в вашу библиотеку!');
+      alert('Сборка добавлена в вашу библиотеку!');
     }
 
-    // Отрисовка Библиотеки
+    // Отрисовка библиотеки
     function renderLibrary() {
       const container = document.getElementById('libraryContainer');
       const library = JSON.parse(localStorage.getItem('user_library') || '[]');
@@ -507,15 +480,45 @@
             <div style="margin-top:6px;">
               <h4 style="font-size:0.85rem; margin-bottom:4px;">Написать отзыв:</h4>
               <input type="text" id="lib-input-${gameId}" placeholder="Ваш отзыв..." style="width:100%; padding:6px; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:white; border-radius:6px; margin-bottom:4px; font-size:0.85rem;">
-              <button class="btn" style="width:100%; padding:6px;" onclick="sendReviewFromLibrary('${gameId}')">Опубликовать</button>
+              <button class="btn btn-send-review" data-id="${gameId}" style="width:100%; padding:6px;">Опубликовать</button>
             </div>
           </div>
         `;
         container.appendChild(card);
       });
+
+      document.querySelectorAll('.btn-send-review').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          sendReviewFromLibrary(id);
+        });
+      });
     }
 
-    // Вкладки
+    // Отправка отзыва
+    function sendReviewFromLibrary(gameId) {
+      const input = document.getElementById('lib-input-' + gameId);
+      const text = input.value.trim();
+      const userName = localStorage.getItem('profile_name') || 'Игрок';
+
+      if (!text) return;
+
+      const reviewsRef = ref(db, 'reviews/' + gameId);
+      push(reviewsRef, {
+        user: userName,
+        text: text,
+        timestamp: Date.now()
+      });
+
+      input.value = '';
+      alert('Отзыв опубликован в общей базе!');
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Навигация и Профиль
     function switchTab(tabName) {
       document.getElementById('btn-tab-catalog').classList.remove('active');
       document.getElementById('btn-tab-library').classList.remove('active');
@@ -528,9 +531,45 @@
       if (tabName === 'library') renderLibrary();
     }
 
-    // Профиль
     function loadProfile() {
       document.getElementById('userName').textContent = localStorage.getItem('profile_name') || 'Игрок';
       document.getElementById('userAvatar').src = localStorage.getItem('profile_avatar') || 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150';
       document.getElementById('userStatus').textContent = localStorage.getItem('profile_status') || 'В поиске сборок...';
-      document.getElementById('userFav').textContent = 'Любимая: ' + (localStorage.getItem('profile_fav
+      document.getElementById('userFav').textContent = 'Любимая: ' + (localStorage.getItem('profile_fav') || 'S.T.A.L.K.E.R.');
+    }
+
+    // События
+    document.getElementById('btn-tab-catalog').addEventListener('click', () => switchTab('catalog'));
+    document.getElementById('btn-tab-library').addEventListener('click', () => switchTab('library'));
+
+    document.getElementById('searchBox').addEventListener('input', (e) => {
+      renderCatalog(e.target.value);
+    });
+
+    document.getElementById('btnOpenProfile').addEventListener('click', () => {
+      document.getElementById('editName').value = localStorage.getItem('profile_name') || '';
+      document.getElementById('editAvatar').value = localStorage.getItem('profile_avatar') || '';
+      document.getElementById('editStatus').value = localStorage.getItem('profile_status') || '';
+      document.getElementById('editFav').value = localStorage.getItem('profile_fav') || '';
+      document.getElementById('profileModal').style.display = 'flex';
+    });
+
+    document.getElementById('btnCloseProfile').addEventListener('click', () => {
+      document.getElementById('profileModal').style.display = 'none';
+    });
+
+    document.getElementById('btnSaveProfile').addEventListener('click', () => {
+      localStorage.setItem('profile_name', document.getElementById('editName').value);
+      localStorage.setItem('profile_avatar', document.getElementById('editAvatar').value);
+      localStorage.setItem('profile_status', document.getElementById('editStatus').value);
+      localStorage.setItem('profile_fav', document.getElementById('editFav').value);
+      loadProfile();
+      document.getElementById('profileModal').style.display = 'none';
+    });
+
+    // Старт
+    loadProfile();
+    renderCatalog();
+  </script>
+</body>
+</html>
