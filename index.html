@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BoostGames — Оптимизированные сборки игр</title>
+  <title>BoostGames — Оптимизированные сборки</title>
   <style>
     :root {
-      --bg-color: #0f111a;
-      --panel-bg: #1a1d2e;
-      --accent-color: #7289da;
-      --accent-hover: #5b6eae;
-      --text-main: #e1e3e6;
-      --text-muted: #8e9297;
-      --border-color: #2b2f48;
+      --bg-color: #0b0e14;
+      --card-bg: #151922;
+      --accent-color: #5865f2;
+      --accent-hover: #4752c4;
+      --text-main: #f2f3f5;
+      --text-muted: #949ba4;
+      --border-color: #2b2d31;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', system-ui, sans-serif;
     }
 
     body {
@@ -29,81 +29,89 @@
       min-height: 100vh;
     }
 
-    /* Боковая панель профиля */
+    /* Боковая панель */
     .sidebar {
-      width: 280px;
-      background-color: var(--panel-bg);
+      width: 300px;
+      background: var(--card-bg);
       border-right: 1px solid var(--border-color);
-      padding: 20px;
+      padding: 24px 16px;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
     .profile-card {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
+      background: rgba(0, 0, 0, 0.25);
       border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
     }
 
     .profile-avatar {
-      width: 90px;
-      height: 90px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid var(--accent-color);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .profile-name {
-      font-size: 1.1rem;
-      font-weight: bold;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
 
     .profile-status {
       font-size: 0.85rem;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-bottom: 8px;
     }
 
     .profile-fav {
       font-size: 0.8rem;
-      color: var(--accent-color);
-      margin-top: 8px;
+      color: #ebdbb2;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
     }
 
     .btn {
       background-color: var(--accent-color);
-      color: white;
+      color: #fff;
       border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
+      padding: 10px 16px;
+      border-radius: 8px;
       font-weight: 600;
-      transition: background 0.2s;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
     }
 
     .btn:hover {
       background-color: var(--accent-hover);
     }
 
-    /* Основной контент */
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Главный контент */
     .main-content {
       flex: 1;
-      padding: 20px 30px;
+      padding: 24px 32px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 24px;
       overflow-x: hidden;
     }
 
-    /* Горизонтальная лента жанров */
+    /* Лента жанров */
     .genres-wrapper {
-      position: relative;
       display: flex;
       align-items: center;
+      gap: 10px;
     }
 
     .genres-container {
@@ -111,7 +119,7 @@
       gap: 10px;
       overflow-x: auto;
       scroll-behavior: smooth;
-      padding: 5px 0;
+      padding: 4px 0;
     }
 
     .genres-container::-webkit-scrollbar {
@@ -119,182 +127,279 @@
     }
 
     .genre-btn {
-      background: var(--panel-bg);
-      color: var(--text-main);
+      background: var(--card-bg);
+      color: var(--text-muted);
       border: 1px solid var(--border-color);
       padding: 8px 18px;
       border-radius: 20px;
       white-space: nowrap;
       cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
     }
 
-    .genre-btn:hover {
+    .genre-btn.active, .genre-btn:hover {
+      background: var(--accent-color);
+      color: #fff;
       border-color: var(--accent-color);
     }
 
     .scroll-btn {
-      background: rgba(0,0,0,0.5);
-      color: white;
-      border: none;
-      width: 30px;
-      height: 30px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       cursor: pointer;
-      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* Сетка карточек игр */
+    /* Карточки игр */
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
     }
 
     .game-card {
-      background: var(--panel-bg);
-      border-radius: 12px;
+      background: var(--card-bg);
+      border-radius: 14px;
       border: 1px solid var(--border-color);
-      padding: 16px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 12px;
     }
 
     .game-card img {
       width: 100%;
-      height: 160px;
+      height: 180px;
       object-fit: cover;
-      border-radius: 8px;
+    }
+
+    .game-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .download-btn {
+      width: 100%;
+      background: #23a55a;
+    }
+
+    .download-btn:hover {
+      background: #1d8a4b;
+    }
+
+    .download-btn.downloaded {
+      background: #80848e;
+      cursor: default;
+    }
+
+    /* Отзывы */
+    .reviews-section {
+      border-top: 1px solid var(--border-color);
+      padding-top: 12px;
+      margin-top: auto;
     }
 
     .reviews-list {
       max-height: 120px;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .review-item {
       background: rgba(0,0,0,0.2);
       padding: 8px;
       border-radius: 6px;
       font-size: 0.85rem;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
     }
 
-    .review-item {
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      padding-bottom: 4px;
-    }
-
-    .review-user {
-      font-weight: bold;
+    .review-author {
+      font-weight: 700;
       color: var(--accent-color);
+      margin-bottom: 2px;
     }
 
-    /* Модальное окно профиля */
+    .review-form {
+      display: flex;
+      gap: 8px;
+    }
+
+    .review-input {
+      flex: 1;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .review-notice {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 8px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 6px;
+    }
+
+    /* Модальное окно */
     .modal {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.8);
       justify-content: center;
       align-items: center;
-      z-index: 10;
+      z-index: 100;
     }
 
     .modal-content {
-      background: var(--panel-bg);
-      padding: 20px;
-      border-radius: 12px;
-      width: 320px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      border-radius: 14px;
+      width: 360px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
     .modal-content input {
-      background: var(--bg-color);
+      background: rgba(0,0,0,0.3);
       border: 1px solid var(--border-color);
       color: white;
-      padding: 8px;
-      border-radius: 6px;
+      padding: 10px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Боковая панель -->
+  <!-- Профиль -->
   <aside class="sidebar">
-    <h2>BoostGames</h2>
+    <h2 style="text-align:center; margin-bottom: 10px;">BoostGames</h2>
     <div class="profile-card">
-      <img id="userAvatar" src="https://via.placeholder.com/90" class="profile-avatar" alt="Avatar">
+      <img id="userAvatar" src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150" class="profile-avatar" alt="Avatar">
       <div id="userName" class="profile-name">Игрок</div>
-      <div id="userStatus" class="profile-status">В поиске сборок...</div>
-      <div id="userFav" class="profile-fav">Любимая игра: —</div>
+      <div id="userStatus" class="profile-status">Готов к игре</div>
+      <div id="userFav" class="profile-fav">Любимая: S.T.A.L.K.E.R.</div>
     </div>
     <button class="btn" onclick="openProfileModal()">Редактировать профиль</button>
   </aside>
 
-  <!-- Основная зона -->
+  <!-- Каталог -->
   <main class="main-content">
     
-    <!-- Лента жанров -->
+    <!-- Фильтр жанров -->
     <div class="genres-wrapper">
       <button class="scroll-btn" onclick="scrollGenres(-150)">&#10094;</button>
       <div class="genres-container" id="genresContainer">
-        <button class="genre-btn">Все игры</button>
-        <button class="genre-btn">Шутеры</button>
-        <button class="genre-btn">RPG</button>
-        <button class="genre-btn">Симуляторы</button>
-        <button class="genre-btn">Открытый мир</button>
-        <button class="genre-btn">Выживание</button>
-        <button class="genre-btn">Экшен</button>
+        <button class="genre-btn active" onclick="filterGenre('all', this)">Все игры</button>
+        <button class="genre-btn" onclick="filterGenre('shooter', this)">Шутеры</button>
+        <button class="genre-btn" onclick="filterGenre('rpg', this)">RPG</button>
+        <button class="genre-btn" onclick="filterGenre('sim', this)">Симуляторы</button>
+        <button class="genre-btn" onclick="filterGenre('openworld', this)">Открытый мир</button>
       </div>
       <button class="scroll-btn" onclick="scrollGenres(150)">&#10095;</button>
     </div>
 
-    <!-- Список игр -->
+    <!-- Игры -->
     <div class="games-grid">
       
       <!-- S.T.A.L.K.E.R. -->
-      <div class="game-card" data-game-id="stalker">
-        <h3>S.T.A.L.K.E.R. Anomaly</h3>
-        <p style="font-size:0.85rem; color: var(--text-muted)">Оптимизированный пак с настроенным Lossless Scaling.</p>
-        <div class="reviews-list" id="reviews-stalker">Загрузка отзывов...</div>
-        <input type="text" id="input-stalker" placeholder="Ваш отзыв..." style="padding:6px; border-radius:4px; border:1px solid var(--border-color); background:var(--bg-color); color:white;">
-        <button class="btn" onclick="sendReview('stalker')">Отправить</button>
+      <div class="game-card" data-genre="shooter openworld">
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" alt="STALKER">
+        <div class="game-info">
+          <h3>S.T.A.L.K.E.R. Anomaly</h3>
+          <p style="font-size:0.85rem; color: var(--text-muted)">Настроенная сборка с оптимизацией и фреймгеном.</p>
+          <button class="btn download-btn" id="btn-dl-stalker" onclick="downloadGame('stalker')">Скачать сборку</button>
+          
+          <div class="reviews-section">
+            <h4 style="margin-bottom:8px; font-size:0.9rem;">Отзывы:</h4>
+            <div class="reviews-list" id="reviews-stalker">Загрузка отзывов...</div>
+            
+            <div id="form-stalker" style="display:none;">
+              <div class="review-form">
+                <input type="text" id="input-stalker" class="review-input" placeholder="Ваш отзыв...">
+                <button class="btn" onclick="sendReview('stalker')">ОК</button>
+              </div>
+            </div>
+            <div id="notice-stalker" class="review-notice">Скачайте сборку, чтобы оставить отзыв</div>
+          </div>
+        </div>
       </div>
 
       <!-- RDR 2 -->
-      <div class="game-card" data-game-id="rdr2">
-        <h3>Red Dead Redemption 2</h3>
-        <p style="font-size:0.85rem; color: var(--text-muted)">Конфиг ультра-низких настроек для слабых ПК.</p>
-        <div class="reviews-list" id="reviews-rdr2">Загрузка отзывов...</div>
-        <input type="text" id="input-rdr2" placeholder="Ваш отзыв..." style="padding:6px; border-radius:4px; border:1px solid var(--border-color); background:var(--bg-color); color:white;">
-        <button class="btn" onclick="sendReview('rdr2')">Отправить</button>
+      <div class="game-card" data-genre="openworld rpg">
+        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500" alt="RDR2">
+        <div class="game-info">
+          <h3>Red Dead Redemption 2</h3>
+          <p style="font-size:0.85rem; color: var(--text-muted)">Оптимизация текстур и конфликт-фикс для слабых ПК.</p>
+          <button class="btn download-btn" id="btn-dl-rdr2" onclick="downloadGame('rdr2')">Скачать сборку</button>
+          
+          <div class="reviews-section">
+            <h4 style="margin-bottom:8px; font-size:0.9rem;">Отзывы:</h4>
+            <div class="reviews-list" id="reviews-rdr2">Загрузка отзывов...</div>
+            
+            <div id="form-rdr2" style="display:none;">
+              <div class="review-form">
+                <input type="text" id="input-rdr2" class="review-input" placeholder="Ваш отзыв...">
+                <button class="btn" onclick="sendReview('rdr2')">ОК</button>
+              </div>
+            </div>
+            <div id="notice-rdr2" class="review-notice">Скачайте сборку, чтобы оставить отзыв</div>
+          </div>
+        </div>
       </div>
 
       <!-- ETS 2 -->
-      <div class="game-card" data-game-id="ets2">
-        <h3>Euro Truck Simulator 2</h3>
-        <p style="font-size:0.85rem; color: var(--text-muted)">Сборка с пресетом руля 180° и сглаживанием.</p>
-        <div class="reviews-list" id="reviews-ets2">Загрузка отзывов...</div>
-        <input type="text" id="input-ets2" placeholder="Ваш отзыв..." style="padding:6px; border-radius:4px; border:1px solid var(--border-color); background:var(--bg-color); color:white;">
-        <button class="btn" onclick="sendReview('ets2')">Отправить</button>
+      <div class="game-card" data-genre="sim">
+        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500" alt="ETS2">
+        <div class="game-info">
+          <h3>Euro Truck Simulator 2</h3>
+          <p style="font-size:0.85rem; color: var(--text-muted)">Пресет управления под руль 180° и плавный FPS.</p>
+          <button class="btn download-btn" id="btn-dl-ets2" onclick="downloadGame('ets2')">Скачать сборку</button>
+          
+          <div class="reviews-section">
+            <h4 style="margin-bottom:8px; font-size:0.9rem;">Отзывы:</h4>
+            <div class="reviews-list" id="reviews-ets2">Загрузка отзывов...</div>
+            
+            <div id="form-ets2" style="display:none;">
+              <div class="review-form">
+                <input type="text" id="input-ets2" class="review-input" placeholder="Ваш отзыв...">
+                <button class="btn" onclick="sendReview('ets2')">ОК</button>
+              </div>
+            </div>
+            <div id="notice-ets2" class="review-notice">Скачайте сборку, чтобы оставить отзыв</div>
+          </div>
+        </div>
       </div>
 
     </div>
-
   </main>
 
-  <!-- Модалка редактирования профиля -->
+  <!-- Окно профиля -->
   <div class="modal" id="profileModal">
     <div class="modal-content">
-      <h3>Редактирование профиля</h3>
+      <h3>Редактировать профиль</h3>
       <input type="text" id="editName" placeholder="Имя">
-      <input type="text" id="editAvatar" placeholder="URL аватара (картинка)">
+      <input type="text" id="editAvatar" placeholder="Ссылка на фото">
       <input type="text" id="editStatus" placeholder="Статус">
       <input type="text" id="editFav" placeholder="Любимая игра">
       <button class="btn" onclick="saveProfile()">Сохранить</button>
-      <button class="btn" style="background:#444" onclick="closeProfileModal()">Отмена</button>
+      <button class="btn" style="background:#3f4248" onclick="closeProfileModal()">Отмена</button>
     </div>
   </div>
 
@@ -303,7 +408,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
 
-    // Твой конфиг
     const firebaseConfig = {
       apiKey: "AIzaSyCgUPJKUJmKvEMVWHjocms_XEOkUvxkjNw",
       authDomain: "boostgames-a16b1.firebaseapp.com",
@@ -317,9 +421,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Слушатель отзывов для каждой игры
     const gameIds = ['stalker', 'rdr2', 'ets2'];
 
+    // Получение отзывов онлайн
     gameIds.forEach(gameId => {
       const reviewsRef = ref(db, 'reviews/' + gameId);
       onValue(reviewsRef, (snapshot) => {
@@ -328,7 +432,7 @@
         container.innerHTML = '';
 
         if (!data) {
-          container.innerHTML = '<i>Пока нет отзывов</i>';
+          container.innerHTML = '<div style="color:var(--text-muted); font-size:0.8rem;">Отзывов пока нет</div>';
           return;
         }
 
@@ -336,17 +440,17 @@
           const item = data[key];
           const div = document.createElement('div');
           div.className = 'review-item';
-          div.innerHTML = `<span class="review-user">${escapeHtml(item.user)}:</span> ${escapeHtml(item.text)}`;
+          div.innerHTML = `<div class="review-author">${escapeHtml(item.user)}</div><div>${escapeHtml(item.text)}</div>`;
           container.appendChild(div);
         });
       });
     });
 
-    // Отправка отзыва
+    // Отправка в Firebase
     window.sendReview = function(gameId) {
       const input = document.getElementById('input-' + gameId);
       const text = input.value.trim();
-      const userName = localStorage.getItem('profile_name') || 'Аноним';
+      const userName = localStorage.getItem('profile_name') || 'Игрок';
 
       if (!text) return;
 
@@ -365,23 +469,58 @@
     }
   </script>
 
-  <!-- Логика UI и профиля -->
+  <!-- Основные скрипты интерфейса -->
   <script>
+    // Скачивание и блокировка формы отзыва
+    function downloadGame(gameId) {
+      localStorage.setItem('downloaded_' + gameId, 'true');
+      updateDownloadUI(gameId);
+      alert('Загрузка сборки началась!');
+    }
+
+    function updateDownloadUI(gameId) {
+      const isDownloaded = localStorage.getItem('downloaded_' + gameId) === 'true';
+      if (isDownloaded) {
+        const btn = document.getElementById('btn-dl-' + gameId);
+        btn.textContent = 'Сборка скачана';
+        btn.classList.add('downloaded');
+        btn.onclick = null;
+
+        document.getElementById('form-' + gameId).style.display = 'block';
+        document.getElementById('notice-' + gameId).style.display = 'none';
+      }
+    }
+
+    // Фильтрация жанров
+    function filterGenre(genre, btn) {
+      document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.game-card');
+      cards.forEach(card => {
+        if (genre === 'all' || card.dataset.genre.includes(genre)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
     function scrollGenres(offset) {
       document.getElementById('genresContainer').scrollBy({ left: offset, behavior: 'smooth' });
     }
 
-    // Загрузка профиля из localStorage
+    // Профиль
     function loadProfile() {
       const name = localStorage.getItem('profile_name') || 'Игрок';
-      const avatar = localStorage.getItem('profile_avatar') || 'https://via.placeholder.com/90';
-      const status = localStorage.getItem('profile_status') || 'В поиске сборок...';
-      const fav = localStorage.getItem('profile_fav') || 'Не выбрана';
+      const avatar = localStorage.getItem('profile_avatar') || 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150';
+      const status = localStorage.getItem('profile_status') || 'Готов к игре';
+      const fav = localStorage.getItem('profile_fav') || 'S.T.A.L.K.E.R.';
 
       document.getElementById('userName').textContent = name;
       document.getElementById('userAvatar').src = avatar;
       document.getElementById('userStatus').textContent = status;
-      document.getElementById('userFav').textContent = 'Любимая игра: ' + fav;
+      document.getElementById('userFav').textContent = 'Любимая: ' + fav;
     }
 
     function openProfileModal() {
@@ -405,7 +544,10 @@
       closeProfileModal();
     }
 
-    window.onload = loadProfile;
+    window.onload = function() {
+      loadProfile();
+      ['stalker', 'rdr2', 'ets2'].forEach(updateDownloadUI);
+    };
   </script>
 </body>
 </html>
