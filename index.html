@@ -177,7 +177,6 @@
             gap: 20px;
             flex-wrap: wrap;
             align-items: center;
-            transition: transform 0.2s ease;
         }
 
         .game-img {
@@ -302,8 +301,222 @@
 </head>
 <body>
 
-    <!-- БОКОВАЯ ПАНЕЛЬ -->
+    <!-- БОКОВАЯ ПАНЕЛЬ (всегда на месте) -->
     <aside class="sidebar">
         <div class="user-profile">
             <div class="avatar" id="avatarIcon">U</div>
-            <div class="user-
+            <div class="user-info">
+                <input type="text" id="usernameInput" class="username-input" value="Гость" title="Кликните, чтобы изменить имя">
+                <span class="status">• В сети</span>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item"><button class="active" id="btnCatalog" onclick="switchView('catalog')">📦 Каталог</button></li>
+            <li class="nav-item"><button id="btnLibrary" onclick="switchView('library')">📚 Библиотека (<span id="libCount">0</span>)</button></li>
+        </ul>
+    </aside>
+
+    <!-- ОСНОВНАЯ ОБЛАСТЬ -->
+    <main class="main-content">
+        <header>
+            <h1 id="pageTitle">Каталог сборок</h1>
+            <p id="pageDesc">Готовые оптимизированные сборки под слабое железо :)</p>
+        </header>
+
+        <!-- Категории (Жанры) -->
+        <div class="categories-bar" id="categoriesBar">
+            <button class="cat-btn active" onclick="filterGenre('all', this)">Все игры</button>
+            <button class="cat-btn" onclick="filterGenre('shooter', this)">🎯 Шутеры</button>
+            <button class="cat-btn" onclick="filterGenre('action', this)">⚔️ Экшен</button>
+            <button class="cat-btn" onclick="filterGenre('racing', this)">🏎️ Гонки</button>
+        </div>
+
+        <!-- Сетка карточек -->
+        <div class="games-grid" id="gamesGrid">
+
+            <!-- Карточка 1: S.T.A.L.K.E.R. Anomaly -->
+            <div class="game-card" data-id="stalker" data-genre="shooter">
+                <img src="https://static.wikia.nocookie.net/stalker/images/c/c5/Anomaly03.jpg/revision/latest/scale-to-width-down/536?cb=20251025161017&path-prefix=ru" alt="S.T.A.L.K.E.R. Anomaly" class="game-img">
+                <div class="game-info">
+                    <div class="game-header">
+                        <div class="game-title">S.T.A.L.K.E.R. Anomaly 1.5.2</div>
+                        <span class="genre-badge">Шутер / Выживание</span>
+                    </div>
+                    <table class="specs-table">
+                        <tr>
+                            <td>Версия сборки:</td>
+                            <td>v1.0 (Lite)</td>
+                        </tr>
+                        <tr>
+                            <td>Оптимизация:</td>
+                            <td>Пак текстур низкого разрешения + user.ltx под FPS</td>
+                        </tr>
+                        <tr>
+                            <td>Размер:</td>
+                            <td>~9.5 ГБ</td>
+                        </tr>
+                    </table>
+                    <div class="actions">
+                        <a href="#" class="btn">Скачать сборку</a>
+                        <button class="btn-library" onclick="toggleLibrary('stalker')">+ В библиотеку</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карточка 2: RDR 2 -->
+            <div class="game-card" data-id="rdr2" data-genre="action">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80" alt="Red Dead Redemption 2" class="game-img">
+                <div class="game-info">
+                    <div class="game-header">
+                        <div class="game-title">Red Dead Redemption 2</div>
+                        <span class="genre-badge">Экшен / Открытый мир</span>
+                    </div>
+                    <table class="specs-table">
+                        <tr>
+                            <td>Статус:</td>
+                            <td>Скоро появится</td>
+                        </tr>
+                        <tr>
+                            <td>Оптимизация:</td>
+                            <td>Тонкая настройка графики и нагрузки GPU/CPU</td>
+                        </tr>
+                    </table>
+                    <div class="actions">
+                        <a href="#" class="btn disabled">В разработке</a>
+                        <button class="btn-library" onclick="toggleLibrary('rdr2')">+ В библиотеку</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карточка 3: Euro Truck Simulator 2 -->
+            <div class="game-card" data-id="ets2" data-genre="racing">
+                <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=500&q=80" alt="Euro Truck Simulator 2" class="game-img">
+                <div class="game-info">
+                    <div class="game-header">
+                        <div class="game-title">Euro Truck Simulator 2</div>
+                        <span class="genre-badge">Гонки / Симулятор</span>
+                    </div>
+                    <table class="specs-table">
+                        <tr>
+                            <td>Статус:</td>
+                            <td>Планируется</td>
+                        </tr>
+                        <tr>
+                            <td>Оптимизация:</td>
+                            <td>Конфиг под слабые карты, оптимизация зеркал</td>
+                        </tr>
+                    </table>
+                    <div class="actions">
+                        <a href="#" class="btn disabled">Скоро</a>
+                        <button class="btn-library" onclick="toggleLibrary('ets2')">+ В библиотеку</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- СКРИПТ -->
+    <script>
+        const usernameInput = document.getElementById('usernameInput');
+        const avatarIcon = document.getElementById('avatarIcon');
+        const libCount = document.getElementById('libCount');
+        const btnCatalog = document.getElementById('btnCatalog');
+        const btnLibrary = document.getElementById('btnLibrary');
+        
+        let currentView = 'catalog';
+        let currentGenre = 'all';
+        let userLibrary = JSON.parse(localStorage.getItem('bg_library')) || [];
+
+        // Профиль
+        const savedName = localStorage.getItem('bg_username');
+        if (savedName) {
+            usernameInput.value = savedName;
+            avatarIcon.textContent = savedName.charAt(0).toUpperCase();
+        }
+
+        usernameInput.addEventListener('input', (e) => {
+            const val = e.target.value.trim() || 'Гость';
+            localStorage.setItem('bg_username', val);
+            avatarIcon.textContent = val.charAt(0).toUpperCase();
+        });
+
+        // Обновление состояния кнопок библиотеки
+        function updateLibraryUI() {
+            libCount.textContent = userLibrary.length;
+            document.querySelectorAll('.game-card').forEach(card => {
+                const id = card.dataset.id;
+                const btn = card.querySelector('.btn-library');
+                if (userLibrary.includes(id)) {
+                    btn.classList.add('saved');
+                    btn.textContent = '✓ В библиотеке';
+                } else {
+                    btn.classList.remove('saved');
+                    btn.textContent = '+ В библиотеку';
+                }
+            });
+        }
+
+        function toggleLibrary(id) {
+            if (userLibrary.includes(id)) {
+                userLibrary = userLibrary.filter(item => item !== id);
+            } else {
+                userLibrary.push(id);
+            }
+            localStorage.setItem('bg_library', JSON.stringify(userLibrary));
+            updateLibraryUI();
+            applyFilters();
+        }
+
+        // Фильтрация по жанрам и отображению
+        function filterGenre(genre, btn) {
+            currentGenre = genre;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            applyFilters();
+        }
+
+        function applyFilters() {
+            document.querySelectorAll('.game-card').forEach(card => {
+                const matchesGenre = (currentGenre === 'all' || card.dataset.genre === currentGenre);
+                const matchesView = (currentView === 'catalog' || userLibrary.includes(card.dataset.id));
+
+                if (matchesGenre && matchesView) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Переключение между вкладками
+        function switchView(view) {
+            currentView = view;
+            
+            btnCatalog.classList.remove('active');
+            btnLibrary.classList.remove('active');
+
+            const categoriesBar = document.getElementById('categoriesBar');
+            const pageTitle = document.getElementById('pageTitle');
+            const pageDesc = document.getElementById('pageDesc');
+
+            if (view === 'catalog') {
+                btnCatalog.classList.add('active');
+                categoriesBar.style.display = 'flex';
+                pageTitle.textContent = 'Каталог сборок';
+                pageDesc.textContent = 'Готовые оптимизированные сборки под слабое железо :)';
+            } else if (view === 'library') {
+                btnLibrary.classList.add('active');
+                categoriesBar.style.display = 'none';
+                pageTitle.textContent = 'Моя библиотека';
+                pageDesc.textContent = 'Игры, сохраненные под вашим профилем';
+            }
+            applyFilters();
+        }
+
+        updateLibraryUI();
+    </script>
+
+</body>
+</html>
