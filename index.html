@@ -38,6 +38,9 @@
             flex-direction: column;
             padding: 20px;
             flex-shrink: 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
         }
 
         .user-profile {
@@ -135,12 +138,26 @@
             color: var(--text-secondary);
         }
 
-        /* Фильтры категорий (Жанры) */
-        .categories-bar {
+        /* Панель категорий со скроллом и стрелками */
+        .categories-wrapper {
             display: flex;
+            align-items: center;
             gap: 10px;
             margin-bottom: 25px;
-            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .categories-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* Скрыть скроллбар в Firefox */
+            padding: 4px 2px;
+        }
+
+        .categories-container::-webkit-scrollbar {
+            display: none; /* Скрыть скроллбар в Chrome/Edge */
         }
 
         .cat-btn {
@@ -151,7 +168,9 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.9rem;
+            white-space: nowrap;
             transition: all 0.2s ease;
+            flex-shrink: 0;
         }
 
         .cat-btn:hover, .cat-btn.active {
@@ -159,6 +178,27 @@
             color: #000;
             font-weight: bold;
             border-color: var(--accent-color);
+        }
+
+        /* Кнопки-стрелки прокрутки */
+        .scroll-arrow {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .scroll-arrow:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
         }
 
         /* Сетка карточек */
@@ -289,6 +329,8 @@
             }
             .sidebar {
                 width: 100%;
+                height: auto;
+                position: relative;
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
             }
@@ -301,7 +343,7 @@
 </head>
 <body>
 
-    <!-- БОКОВАЯ ПАНЕЛЬ (всегда на месте) -->
+    <!-- БОКОВАЯ ПАНЕЛЬ -->
     <aside class="sidebar">
         <div class="user-profile">
             <div class="avatar" id="avatarIcon">U</div>
@@ -324,12 +366,19 @@
             <p id="pageDesc">Готовые оптимизированные сборки под слабое железо :)</p>
         </header>
 
-        <!-- Категории (Жанры) -->
-        <div class="categories-bar" id="categoriesBar">
-            <button class="cat-btn active" onclick="filterGenre('all', this)">Все игры</button>
-            <button class="cat-btn" onclick="filterGenre('shooter', this)">🎯 Шутеры</button>
-            <button class="cat-btn" onclick="filterGenre('action', this)">⚔️ Экшен</button>
-            <button class="cat-btn" onclick="filterGenre('racing', this)">🏎️ Гонки</button>
+        <!-- Категории (Жанры) со скроллом и стрелками -->
+        <div class="categories-wrapper" id="categoriesBar">
+            <button class="scroll-arrow" onclick="scrollCategories(-200)">&#10094;</button>
+            <div class="categories-container" id="catContainer">
+                <button class="cat-btn active" onclick="filterGenre('all', this)">🔥 Все игры</button>
+                <button class="cat-btn" onclick="filterGenre('action', this)">⚔️ Экшен</button>
+                <button class="cat-btn" onclick="filterGenre('shooter', this)">🎯 Шутеры</button>
+                <button class="cat-btn" onclick="filterGenre('racing', this)">🏎️ Гонки</button>
+                <button class="cat-btn" onclick="filterGenre('survival', this)">🌲 Выживание</button>
+                <button class="cat-btn" onclick="filterGenre('simulator', this)">🎮 Симуляторы</button>
+                <button class="cat-btn" onclick="filterGenre('rpg', this)">🛡️ RPG</button>
+            </div>
+            <button class="scroll-arrow" onclick="scrollCategories(200)">&#10095;</button>
         </div>
 
         <!-- Сетка карточек -->
@@ -441,6 +490,12 @@
             localStorage.setItem('bg_username', val);
             avatarIcon.textContent = val.charAt(0).toUpperCase();
         });
+
+        // Прокрутка категорий стрелками
+        function scrollCategories(offset) {
+            const container = document.getElementById('catContainer');
+            container.scrollBy({ left: offset, behavior: 'smooth' });
+        }
 
         // Обновление состояния кнопок библиотеки
         function updateLibraryUI() {
