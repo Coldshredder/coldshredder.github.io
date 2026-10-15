@@ -3,23 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой Сайт</title>
+    <title>BoostGames — Оптимизированные сборки</title>
     <style>
-        /* 
-          ==================================================
-          1. ПЕРЕМЕННЫЕ ДИЗАЙНА (Цвета меняются здесь одной строкой)
-          ==================================================
-        */
         :root {
-            --bg-color: #0f111a;        /* Цвет фона сайта */
-            --card-bg: #1a1d2e;         /* Цвет блоков/карточек */
-            --accent-color: #00ff88;    /* Основной акцент (кнопки, неоновый цвет) */
-            --text-color: #e0e6ed;      /* Основной цвет текста */
-            --text-secondary: #94a3b8;  /* Цвет второстепенного текста */
-            --border-color: #2e344e;    /* Цвет границ и рамок */
+            --bg-color: #0f111a;
+            --card-bg: #1a1d2e;
+            --accent-color: #00ff88;
+            --text-color: #e0e6ed;
+            --text-secondary: #94a3b8;
+            --border-color: #2e344e;
         }
 
-        /* Общие базовые стили */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -38,53 +32,100 @@
             padding: 20px;
         }
 
-        /* Шапка сайта */
         header {
             text-align: center;
-            padding: 50px 20px;
+            padding: 40px 20px;
             max-width: 800px;
             margin: 0 auto;
         }
 
         header h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             color: var(--accent-color);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         header p {
             color: var(--text-secondary);
-            font-size: 1.2rem;
-        }
-
-        /* Основной контейнер для твоего будущего контента */
-        .container {
-            max-width: 1100px;
-            width: 100%;
-            margin: 0 auto;
-            flex: 1;
-            /* Сетка для карточек (автоматически выстраивает их в ряды) */
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 20px 0;
-        }
-
-        /* Шаблон пустого блока (можно использовать как основу для будущих игр) */
-        .empty-block {
-            background-color: var(--card-bg);
-            border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 40px 20px;
-            text-align: center;
-            color: var(--text-secondary);
             font-size: 1.1rem;
         }
 
-        /* Подвал сайта */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        /* Стили для разделов (секций) */
+        .section-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .section-box h2 {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .section-box p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        /* Стили для таблички */
+        .game-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        .game-table th, .game-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .game-table th {
+            color: var(--accent-color);
+            background-color: rgba(0, 255, 136, 0.05);
+        }
+
+        .game-table td {
+            color: var(--text-color);
+        }
+
+        .game-table tr:hover {
+            background-color: rgba(255, 255, 136, 0.02);
+        }
+
+        /* Кнопка */
+        .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: opacity 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
         footer {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 40px;
             padding: 20px;
             color: var(--text-secondary);
             font-size: 0.9rem;
@@ -94,25 +135,54 @@
 </head>
 <body>
 
-    <!-- ШАПКА САЙТА (Изменяй текст тут) -->
     <header>
-        <h1>Название Проекта</h1>
-        <p>Здесь будет описание твоего сайта или каталога.</p>
+        <h1>BoostGames</h1>
+        <p>Готовые оптимизированные сборки игр: скачал, распаковал и играешь без лагов.</p>
     </header>
 
-    <!-- ОСНОВНАЯ ЧАСТЬ (Сюда ты будешь добавлять контент) -->
     <div class="container">
         
-        <!-- Временный пустой блок, показывающий, что сайт работает -->
-        <div class="empty-block">
-            Сайт пуст :) Скоро здесь появятся твои сборки.
+        <!-- Секция 1: О проекте -->
+        <div class="section-box">
+            <h2>О проекте :)</h2>
+            <p>Здесь собираются игры с уже встроенными модами на оптимизацию, настроенными конфигами и исправленными багами. Больше не нужно часами искать фиксы по форумам — всё сделано за вас.</p>
+        </div>
+
+        <!-- Секция 2: Таблица с играми -->
+        <div class="section-box">
+            <h2>Каталог сборок</h2>
+            <p>Список доступных проектов и их текущий статус:</p>
+            
+            <table class="game-table">
+                <thead>
+                    <tr>
+                        <th>Игра / Сборка</th>
+                        <th>Особенности</th>
+                        <th>Статус</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>S.T.A.L.K.E.R. Anomaly</strong></td>
+                        <td>Вшиты моды на FPS, оптимизация теней, user.ltx</td>
+                        <td><span style="color: var(--accent-color);">Готово</span></td>
+                        <td><a href="#" class="btn">Скоро</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Следующая игра</strong></td>
+                        <td>Подборка модов под слабое железо</td>
+                        <td><span style="color: var(--text-secondary);">В разработке</span></td>
+                        <td><a href="#" class="btn" style="opacity: 0.5; pointer-events: none;">Ждем</a></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
     </div>
 
-    <!-- ПОДВАЛ САЙТА -->
     <footer>
-        <p>© 2026. Все права защищены.</p>
+        <p>© 2026 BoostGames. Все права защищены.</p>
     </footer>
 
 </body>
