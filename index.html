@@ -29,7 +29,7 @@
             min-height: 100vh;
         }
 
-        /* Боковая панель (Sidebar) */
+        /* Боковая панель */
         .sidebar {
             width: 260px;
             background-color: var(--sidebar-bg);
@@ -93,19 +93,23 @@
             gap: 8px;
         }
 
-        .nav-item a {
+        .nav-item button {
+            width: 100%;
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 10px 14px;
             color: var(--text-secondary);
-            text-decoration: none;
+            background: none;
+            border: none;
             border-radius: 8px;
             font-size: 0.95rem;
+            cursor: pointer;
+            text-align: left;
             transition: all 0.2s ease;
         }
 
-        .nav-item a:hover, .nav-item a.active {
+        .nav-item button:hover, .nav-item button.active {
             background-color: var(--card-bg);
             color: var(--accent-color);
         }
@@ -118,7 +122,7 @@
         }
 
         header {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         header h1 {
@@ -129,6 +133,32 @@
 
         header p {
             color: var(--text-secondary);
+        }
+
+        /* Фильтры категорий (Жанры) */
+        .categories-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .cat-btn {
+            background-color: var(--sidebar-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .cat-btn:hover, .cat-btn.active {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            border-color: var(--accent-color);
         }
 
         /* Сетка карточек */
@@ -147,6 +177,7 @@
             gap: 20px;
             flex-wrap: wrap;
             align-items: center;
+            transition: transform 0.2s ease;
         }
 
         .game-img {
@@ -164,10 +195,25 @@
             min-width: 260px;
         }
 
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
         .game-title {
             color: var(--accent-color);
             font-size: 1.4rem;
-            margin-bottom: 10px;
+        }
+
+        .genre-badge {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
         }
 
         .specs-table {
@@ -191,6 +237,12 @@
             width: 35%;
         }
 
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
         .btn {
             display: inline-block;
             padding: 8px 18px;
@@ -201,6 +253,8 @@
             border-radius: 6px;
             transition: opacity 0.2s ease;
             font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
         }
 
         .btn:hover {
@@ -211,6 +265,22 @@
             background-color: var(--border-color);
             color: var(--text-secondary);
             pointer-events: none;
+        }
+
+        .btn-library {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-library:hover, .btn-library.saved {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
         }
 
         /* Адаптивность */
@@ -236,93 +306,4 @@
     <aside class="sidebar">
         <div class="user-profile">
             <div class="avatar" id="avatarIcon">U</div>
-            <div class="user-info">
-                <input type="text" id="usernameInput" class="username-input" value="Гость" title="Кликните, чтобы изменить имя">
-                <span class="status">• В сети</span>
-            </div>
-        </div>
-
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="#" class="active">🏠 Главная</a></li>
-            <li class="nav-item"><a href="#">📦 Каталог</a></li>
-            <li class="nav-item"><a href="#">📚 Библиотека</a></li>
-            <li class="nav-item"><a href="#">⚙️ Настройки</a></li>
-        </ul>
-    </aside>
-
-    <!-- ОСНОВНАЯ ОБЛАСТЬ -->
-    <main class="main-content">
-        <header>
-            <h1>Каталог сборок</h1>
-            <p>Готовые оптимизированные сборки для слабого железа :)</p>
-        </header>
-
-        <div class="games-grid">
-
-            <!-- Карточка S.T.A.L.K.E.R. Anomaly -->
-            <div class="game-card">
-                <img src="https://static.wikia.nocookie.net/stalker/images/c/c5/Anomaly03.jpg/revision/latest/scale-to-width-down/536?cb=20251025161017&path-prefix=ru" alt="S.T.A.L.K.E.R. Anomaly" class="game-img">
-                <div class="game-info">
-                    <div class="game-title">S.T.A.L.K.E.R. Anomaly 1.5.2</div>
-                    <table class="specs-table">
-                        <tr>
-                            <td>Версия сборки:</td>
-                            <td>v1.0 (Lite)</td>
-                        </tr>
-                        <tr>
-                            <td>Оптимизация:</td>
-                            <td>Пак текстур низкого разрешения + user.ltx под FPS</td>
-                        </tr>
-                        <tr>
-                            <td>Размер:</td>
-                            <td>~9.5 ГБ</td>
-                        </tr>
-                    </table>
-                    <a href="#" class="btn">Скачать сборку</a>
-                </div>
-            </div>
-
-            <!-- Карточка RDR 2 -->
-            <div class="game-card">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80" alt="Red Dead Redemption 2" class="game-img">
-                <div class="game-info">
-                    <div class="game-title">Red Dead Redemption 2</div>
-                    <table class="specs-table">
-                        <tr>
-                            <td>Статус:</td>
-                            <td>Скоро появится</td>
-                        </tr>
-                        <tr>
-                            <td>Оптимизация:</td>
-                            <td>Тонкая настройка графики и нагрузки GPU/CPU</td>
-                        </tr>
-                    </table>
-                    <a href="#" class="btn disabled">В разработке</a>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- СКРИПТ СОХРАНЕНИЯ ПРОФИЛЯ -->
-    <script>
-        const usernameInput = document.getElementById('usernameInput');
-        const avatarIcon = document.getElementById('avatarIcon');
-
-        // Загрузка ника из памяти браузера при открытии
-        const savedName = localStorage.getItem('bg_username');
-        if (savedName) {
-            usernameInput.value = savedName;
-            avatarIcon.textContent = savedName.charAt(0).toUpperCase();
-        }
-
-        // Сохранение ника при изменении
-        usernameInput.addEventListener('input', (e) => {
-            const val = e.target.value.trim() || 'Гость';
-            localStorage.setItem('bg_username', val);
-            avatarIcon.textContent = val.charAt(0).toUpperCase();
-        });
-    </script>
-
-</body>
-</html>
+            <div class="user-
